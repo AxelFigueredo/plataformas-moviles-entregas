@@ -1,19 +1,19 @@
 /*Punto 1*/
-@media screen and (max-width: 400px){
-    .body{
+@media screen and (min-width: 401px) {
+    body {
         background-color: rgb(40,60,80);
     }    
 }
 /*Punto 2*/
-@media screen and (min-width: 800px){
+@media (min-width: 800px){
     h1 {
         text-align: center;
     }
 }
 /*Punto 3*/
-@media screen and (max-width: 50ch){
-    .article{
-
+@media (orientation: landscape){
+    article{
+        max-width: 50ch;
     }
 } 
 /*Punto 4*/
@@ -23,36 +23,45 @@
     }
 }
 /*Punto 5*/
-@media screen and (print){
+@media print{
     *{
         font-family: serif;
     }
 }
 /*Punto 6*/
-.body{
+@media (prefers-color-scheme: light){
+  body, h1{
     color: #111;
     background-color: #DDD;
+  }
 }
-.h1{
-    color: #111;
-    background-color: #DDD;
-}
+
 /*Punto 7*/
-@media screen and (900px > width >= 800px) {
-    .img{
-        image-rendering: unset;
+@media screen and (hover: none){
+    a {
+        color: #212;
+        padding: 2px 5px;
     }
 }
+
+/*Punto 8*/
+@media screen and (min-width: 800px) and (max-width: 900px){
+    img{
+        display: none;
+    }
+}
+
 /*Punto 9*/
-@media screen and (200px > width < 400px) {
-    .img{
-        image-resolution: 400px;
+@media screen and (min-width: 200px) and (max-width: 400px) {
+    img{
+        height: 400px;
         object-fit: cover;
     }
 }
+
 /*Punto 10*/
-@media screen and (resolution: 2dppx) {
-    .article{
+@media (resolution > 2dppx) {
+    article{
         background-color: #667;
     }
 }
