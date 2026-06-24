@@ -1,67 +1,72 @@
-/*Punto 1*/
+/* Punto 1: Fondo del body cuando la pantalla tiene más de 400px */
 @media (min-width: 401px) {
     body {
-        background-color: rgb(40,60,80);
-    }    
+        background-color: rgb(40, 60, 80);
+    }
 }
-/*Punto 2*/
-@media (min-width: 800px){
+
+/* Punto 2: Centrar h1 cuando la pantalla tiene menos de 800px */
+@media (max-width: 799px) {
     h1 {
         text-align: center;
     }
 }
-/*Punto 3*/
-@media (orientation: landscape){
-    article{
+
+/* Punto 3: Ancho máximo del article en orientación horizontal */
+@media (orientation: landscape) {
+    article {
         max-width: 50ch;
     }
-} 
-/*Punto 4*/
-@media screen and (min-width: 200px){
-    .h1{
+}
+
+/* Punto 4: Fondo del h1 cuando el alto de pantalla es mínimo 200px */
+@media (min-height: 200px) {
+    h1 {
         background-color: aliceblue;
     }
 }
-/*Punto 5*/
-@media print{
-    *{
+
+/* Punto 5: Fuente serif para todos los elementos al imprimir */
+@media print {
+    * {
         font-family: serif;
     }
 }
-/*Punto 6*/
-@media (prefers-color-scheme: light){
-  body, h1{
-    color: #111;
-    background-color: #DDD;
-  }
+
+/* Punto 6: Estilo claro si el usuario lo prefiere */
+@media (prefers-color-scheme: light) {
+    body, h1 {
+        color: #111;
+        background-color: #DDD;
+    }
 }
 
-/*Punto 7*/
-@media screen and (hover: none){
+/* Punto 7: Links sin hover en pantalla */
+@media screen and (hover: none) {
     a {
-        color: #212;
+        background-color: #212;
         padding: 2px 5px;
     }
 }
 
-/*Punto 8*/
-@media screen and (min-width: 800px) and (max-width: 900px){
-    img{
+/* Punto 8: Ocultar imagen entre 800px y 899px */
+@media screen and (min-width: 800px) and (max-width: 899px) {
+    img {
         display: none;
     }
 }
 
-/*Punto 9*/
+/* Punto 9: Imagen con alto fijo entre 200px y 400px */
 @media screen and (min-width: 200px) and (max-width: 400px) {
-    img{
+    img {
         height: 400px;
         object-fit: cover;
     }
 }
 
-/*Punto 10*/
-@media (resolution > 2dppx) {
-    article{
+/* Punto 10: Fondo del article con alta densidad de píxeles */
+@media (min-resolution: 2dppx) {
+    article {
         background-color: #667;
     }
 }
