@@ -52,7 +52,7 @@
 /* Punto 8: Ocultar imagen entre 800px y 899px */
 @media screen and (min-width: 800px) and (max-width: 899px) {
     img {
-        display: none;
+        display: none !important;
     }
 }
 
