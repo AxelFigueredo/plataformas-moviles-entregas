@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tablero de Puntos - DOM y JavaScript</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        #tablero-card {
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container my-3 my-md-5">
+        <h1 class="mb-4 text-center">Tablero de Puntos</h1>
+        
+        <!-- Tarjeta Principal del Tablero -->
+        <div class="card shadow mb-4" id="tablero-card">
+            <div class="card-body py-5">
+                <div class="row text-center align-items-center">
+                    <!-- Equipo Local -->
+                    <div class="col-5">
+                        <span class="display-1 fw-bold" id="score-local" style="color: #0d6efd;">0</span>
+                        <p class="h3 m-0 text-truncate" id="label-local">Local</p>
+                    </div>
+                    <!-- Separador -->
+                    <div class="col-2">
+                        <span class="display-1 text-muted">:</span>
+                    </div>
+                    <!-- Equipo Visitante -->
+                    <div class="col-5">
+                        <span class="display-1 fw-bold" id="score-visitante" style="color: #dc3545;">0</span>
+                        <p class="h3 m-0 text-truncate" id="label-visitante">Visitante</p>
+                    </div>
+                </div>
+                
+                <!-- Indicador de Partido Finalizado -->
+                <div id="estado-partido" class="text-center mt-3 d-none">
+                    <span class="badge bg-danger fs-6 px-3 py-2">PARTIDO FINALIZADO</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Control y Acciones -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Controles de Puntuación</h2>
+                <div class="row g-2">
+                    <!-- Controles Local -->
+                    <div class="col-6 col-md-3">
+                        <div class="input-group">
+                            <button class="btn btn-outline-primary w-50 btn-control" onclick="modificarPuntos('local', 1)">
+                                <i class="bi bi-plus-lg"></i> Local
+                            </button>
+                            <button class="btn btn-outline-secondary w-50 btn-control" onclick="modificarPuntos('local', -1)">
+                                <i class="bi bi-dash-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Controles Visitante -->
+                    <div class="col-6 col-md-3">
+                        <div class="input-group">
+                            <button class="btn btn-outline-danger w-50 btn-control" onclick="modificarPuntos('visitante', 1)">
+                                <i class="bi bi-plus-lg"></i> Visit.
+                            </button>
+                            <button class="btn btn-outline-secondary w-50 btn-control" onclick="modificarPuntos('visitante', -1)">
+                                <i class="bi bi-dash-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Acciones Especiales -->
+                    <div class="col-4 col-md-2">
+                        <button class="btn btn-warning w-100 btn-control" id="btn-invertir" onclick="invertirPuntaje()">
+                            Invertir
+                        </button>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <button class="btn btn-dark w-100 btn-control" id="btn-finalizar" onclick="finalizarPartido()">
+                            Finalizar
+                        </button>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <button class="btn btn-danger w-100" onclick="reiniciarPartido()">
+                            Reinicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Personalización (Bonus) -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Configuración y Personalización</h2>
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <label for="input-nombre-local" class="form-label">Nombre Local</label>
+                        <input type="text" id="input-nombre-local" class="form-control" value="Local" oninput="cambiarNombre('local', this.value)">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="input-nombre-visitante" class="form-label">Nombre Visitante</label>
+                        <input type="text" id="input-nombre-visitante" class="form-control" value="Visitante" oninput="cambiarNombre('visitante', this.value)">
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label for="color-local" class="form-label">Color Local</label>
+                        <input type="color" id="color-local" class="form-control form-control-color w-100" value="#0d6efd" onchange="cambiarColorTexto('local', this.value)">
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label for="color-visitante" class="form-label">Color Visitante</label>
+                        <input type="color" id="color-visitante" class="form-control form-control-color w-100" value="#dc3545" onchange="cambiarColorTexto('visitante', this.value)">
+                    </div>
+                </div>
+                <!-- Ayuda de Atajos de Teclado -->
+                <div class="mt-3 text-muted small">
+                    <strong>Atajos de teclado:</strong> 
+                    <kbd>Q</kbd>/<kbd>W</kbd> (+/- Local) | 
+                    <kbd>O</kbd>/<kbd>P</kbd> (+/- Visitante) | 
+                    <kbd>I</kbd> (Invertir) | 
+                    <kbd>R</kbd> (Reiniciar)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        // Estado global del tablero
+        let puntosLocal = 0;
+        let puntosVisitante = 0;
+        let partidoTerminado = false;
+
+        // Referencias a elementos del DOM
+        const spanLocal = document.getElementById('score-local');
+        const spanVisitante = document.getElementById('score-visitante');
+        const labelLocal = document.getElementById('label-local');
+        const labelVisitante = document.getElementById('label-visitante');
+        const badgeEstado = document.getElementById('estado-partido');
+        const botonesControl = document.querySelectorAll('.btn-control');
+
+        /**
+         * Actualiza los puntos en la interfaz
+         */
+        function actualizarVista() {
+            spanLocal.textContent = puntosLocal;
+            spanVisitante.textContent = puntosVisitante;
+        }
+
+        /**
+         * Modifica los puntos de un equipo (suma o resta asegurando que no baje de 0)
+         */
+        function modificarPuntos(equipo, cantidad) {
+            if (partidoTerminado) return;
+
+            if (equipo === 'local') {
+                puntosLocal = Math.max(0, puntosLocal + cantidad);
+            } else if (equipo === 'visitante') {
+                puntosVisitante = Math.max(0, puntosVisitante + cantidad);
+            }
+            actualizarVista();
+        }
+
+        /**
+         * Invertir puntaje entre local y visitante
+         */
+        function invertirPuntaje() {
+            if (partidoTerminado) return;
+            const temp = puntosLocal;
+            puntosLocal = puntosVisitante;
+            puntosVisitante = temp;
+            actualizarVista();
+        }
+
+        /**
+         * Finaliza el partido y deshabilita los controles de puntuación
+         */
+        function finalizarPartido() {
+            partidoTerminado = true;
+            badgeEstado.classList.remove('d-none');
+            botonesControl.forEach(btn => btn.disabled = true);
+        }
+
+        /**
+         * Reinicia el tablero a 0 y habilita los controles
+         */
+        function reiniciarPartido() {
+            puntosLocal = 0;
+            puntosVisitante = 0;
+            partidoTerminado = false;
+            badgeEstado.classList.add('d-none');
+            botonesControl.forEach(btn => btn.disabled = false);
+            actualizarVista();
+        }
+
+        /**
+         * Cambiar nombre de los equipos (Bonus)
+         */
+        function cambiarNombre(equipo, nuevoNombre) {
+            const nombreFinal = nuevoNombre.trim() === '' ? (equipo === 'local' ? 'Local' : 'Visitante') : nuevoNombre;
+            if (equipo === 'local') {
+                labelLocal.textContent = nombreFinal;
+            } else {
+                labelVisitante.textContent = nombreFinal;
+            }
+        }
+
+        /**
+         * Cambiar color de los puntajes por equipo (Bonus)
+         */
+        function cambiarColorTexto(equipo, color) {
+            if (equipo === 'local') {
+                spanLocal.style.color = color;
+            } else {
+                spanVisitante.style.color = color;
+            }
+        }
+
+        /**
+         * Atajos de teclado (Bonus)
+         */
+        document.addEventListener('keydown', (e) => {
+            // Evitar conflictos si el usuario está escribiendo en un input
+            if (e.target.tagName === 'INPUT') return;
+
+            const key = e.key.toUpperCase();
+            if (key === 'Q') modificarPuntos('local', 1);
+            if (key === 'W') modificarPuntos('local', -1);
+            if (key === 'O') modificarPuntos('visitante', 1);
+            if (key === 'P') modificarPuntos('visitante', -1);
+            if (key === 'I') invertirPuntaje();
+            if (key === 'R') reiniciarPartido();
+        });
+    </script>
+</body>
+</html>
